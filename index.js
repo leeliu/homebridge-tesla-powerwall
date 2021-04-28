@@ -96,6 +96,9 @@ function TeslaPowerwall(log, config) {
                 defaultValue(config, ['additionalServices', 'powerwall', 'batteryIsChargingSwitch'], false),
             makeOnOffSwitchReadOnly:
                 defaultValue(config, ['additionalServices', 'powerwall', 'makeOnOffSwitchReadOnly'], true),
+            powerwallSwitch:
+                defaultValue(config, ['additionalServices', 'powerwall', 'powerwallSwitch'], true)
+
         },
         solar: {
             homekitVisual:

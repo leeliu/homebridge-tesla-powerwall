@@ -55,30 +55,32 @@ Powerwall.prototype = {
             .setCharacteristic(Characteristic.FirmwareRevision, '-')
             .setCharacteristic(Characteristic.SerialNumber, this.uniqueId);
         services.push(info);
-        
-        this.stateSwitch = new Service.Switch(this.name, "1");
-        this.stateSwitch
-            .getCharacteristic(Characteristic.On)
-            .on('get', this.getStateSwitch.bind(this))
-            .on('set', this.setStateSwitch.bind(this));
-        eventPolling(this.stateSwitch, Characteristic.On, this.pollingInterval);
-        services.push(this.stateSwitch);
 
-        this.battery = 
-            new Service.BatteryService(this.name + ' ' + 'Battery');
-        this.battery
-            .getCharacteristic(Characteristic.BatteryLevel)
-            .on('get', this.getBatteryLevel.bind(this));
-        eventPolling(this.battery, Characteristic.BatteryLevel, this.pollingInterval);
-        this.battery
-            .getCharacteristic(Characteristic.ChargingState)
-            .on('get', this.getChargingState.bind(this));
-        eventPolling(this.battery, Characteristic.ChargingState, this.pollingInterval);
-        this.battery
-            .getCharacteristic(Characteristic.StatusLowBattery)
-            .on('get', this.getLowBattery.bind(this));
-        eventPolling(this.battery, Characteristic.StatusLowBattery, this.pollingInterval);
-        services.push(this.battery);
+        if (this.additionalServices.powerwallSwitch) {
+            this.stateSwitch = new Service.Switch(this.name, '1');
+            this.stateSwitch
+                .getCharacteristic(Characteristic.On)
+                .on('get', this.getStateSwitch.bind(this))
+                .on('set', this.setStateSwitch.bind(this));
+            eventPolling(this.stateSwitch, Characteristic.On, this.pollingInterval);
+            services.push(this.stateSwitch);
+
+            this.battery =
+                new Service.BatteryService(this.name + ' ' + 'Battery');
+            this.battery
+                .getCharacteristic(Characteristic.BatteryLevel)
+                .on('get', this.getBatteryLevel.bind(this));
+            eventPolling(this.battery, Characteristic.BatteryLevel, this.pollingInterval);
+            this.battery
+                .getCharacteristic(Characteristic.ChargingState)
+                .on('get', this.getChargingState.bind(this));
+            eventPolling(this.battery, Characteristic.ChargingState, this.pollingInterval);
+            this.battery
+                .getCharacteristic(Characteristic.StatusLowBattery)
+                .on('get', this.getLowBattery.bind(this));
+            eventPolling(this.battery, Characteristic.StatusLowBattery, this.pollingInterval);
+            services.push(this.battery);
+        }
 
         if (this.additionalServices.homekitVisual) {
             this.batteryVisualizer = 
